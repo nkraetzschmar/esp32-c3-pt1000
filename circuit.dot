@@ -1,0 +1,43 @@
+graph G {
+	rankdir=LR;
+	bgcolor="beige"
+
+	node [shape=record, fontname="mononoki", style="filled", fillcolor="white"];
+	edge [penwidth=2.0];
+
+	subgraph cluster_esp {
+		label="ESP32-C3\nDevKitM-1";
+		esp [label="{{<gnd1>GND|<_3v3_1>3V3|<_3v3_2>3V3|<io2>IO2|<io3>IO3|<gnd2>GND|<rst>RST|<gnd3>GND|<io0>IO0|<io1>IO1|<io10>IO10|<gnd4>GND|<_5v_1>5V|<_5v_2>5V|<gnd5>GND}|{<gnd6>GND|<tx>TX|<rx>RX|<gnd7>GND|<io9>IO9|<io8>IO8|<gnd8>GND|<io7>GPIO7|<io6>GPIO6|<io5>GPIO5|<io4>GPIO4|<gnd9>GND|<io18>IO18|<io19>IO19|<gnd10>GND}}"];
+		fontname="mononoki"
+		bgcolor="lightgray"
+	}
+
+	subgraph cluster_max {
+		label="Adafruit\nMAX31865";
+		max [label="<cs>CS|<sdi>SDI|<sdo>SDO|<clk>CLK|<gnd>GND|<_3v3>VIN"];
+		max_term [label="PT1000\nTerminal"]
+		fontname="mononoki"
+		bgcolor="lightgray"
+	}
+
+	subgraph cluster_bat {
+		label="Battery";
+		bat [label="<gnd>GND|<_5v>5V"];
+		fontname="mononoki"
+		bgcolor="lightgray"
+	}
+
+	pt1000 [label="PT1000\nProbe"]
+
+	bat:_5v -- esp:_5v_1 [color="red"];
+	bat:gnd -- esp:gnd1 [color="black"];
+	bat:gnd -- max:gnd [color="black"];
+	esp:_3v3_1 -- max:_3v3 [color="red"];
+
+	esp:io6 -- max:sdi [color="blue"];
+	esp:io5 -- max:sdo [color="green"];
+	esp:io4 -- max:clk [color="darkorange"];
+	esp:io7 -- max:cs [color="purple"];
+
+	max_term -- pt1000 [color="brown"]
+}
